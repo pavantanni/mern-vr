@@ -32,7 +32,7 @@ router.post("/login",async (req,res)=>{
         if(!user){
             return res.status(401).json({message:"User email not found"})
         }
-        let isMatch=bcrypt.compare(password,user.hashedPassword)
+        let isMatch=await bcrypt.compare(password,user.password)
         if(!isMatch){
             return res.status(401).json({message:"Invalid password"})
         }
