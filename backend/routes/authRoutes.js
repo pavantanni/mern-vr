@@ -25,5 +25,25 @@ router.post("/register",async (req,res)=>{
     }
 })
 
+router.post("/login",async (req,res)=>{
+    try{
+        const {email,password}=req.body 
+        let user=await User.findOne({email})
+        if(!user){
+            return res.status(401).json({message:"User email not found"})
+        }
+        let isMatch=bcrypt.compare(password,user.hashedPassword)
+        if(!isMatch){
+            return res.status(401).json({message:"Invalid password"})
+        }
+        return res.status(200).json({message:"Login successful"})
+    }
+    catch(err){
+        console.log("from login route",err)
+        return res.status(500).json({message:`from login route server error ${err}`})
+    }
+})
+
+
 
 module.exports=router
