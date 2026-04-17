@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
- const role=localStorage.getItem("user.role")
+  const navigate = useNavigate();
+  const role = localStorage.getItem("role");
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -13,7 +16,7 @@ function Home() {
     try {
       const res = await API.get("/product");
       setProducts(res.data);
-      console.log(res.data)
+      // REMOVED navigate("/cart") from here!
     } catch (err) {
       console.log(err);
     } finally {
@@ -22,7 +25,16 @@ function Home() {
   };
 
   const addToCart = async (id) => {
-    
+    API.post("/cart/add", { productId: id })
+      .then((res) => {
+        if (res.status === 201) {
+          alert("Added to cart");
+          navigate("/cart"); // This one stays!
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -40,7 +52,7 @@ function Home() {
               <div className="col-md-3" key={p._id}>
                 <div className="card mb-3 px-3">
                   <img
-                    src={p.image}
+                    src={p.image || "https://placeholder.com"} // Fallback image
                     className="card-img-top"
                     alt={p.name}
                     style={{ height: "200px", objectFit: "cover" }}
@@ -50,15 +62,14 @@ function Home() {
                     <h5>{p.name}</h5>
                     <p>₹{p.price}</p>
                     <p>{p.description}</p>
-                    {
-                      role=="user"&&<button
-                                          className="btn btn-success w-100"
-                                          onClick={() => addToCart(p._id)}
-                                        >
-                                          Add to Cart
-                                        </button>
-                    }
-                    
+                    {role === "user" && (
+                      <button
+                        className="btn btn-success w-100"
+                        onClick={() => addToCart(p._id)}
+                      >
+                        Add to Cart
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
