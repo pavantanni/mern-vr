@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  // FIXED: Added 'mern-vr-backend' and '/api'
+  // This must be your SPECIFIC project link
   baseURL: "https://onrender.com",
 });
 
