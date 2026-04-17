@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  // ✅ You MUST include /api at the end
-  baseURL: "https://onrender.com",
+  baseURL: "https://mern-vr-backend.onrender.com/api",
 });
 
 API.interceptors.request.use((req) => {
