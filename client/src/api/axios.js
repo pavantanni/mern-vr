@@ -10,4 +10,8 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+const API = axios.create({
+  baseURL: "https://onrender.com",
+});
+
 export default API;
