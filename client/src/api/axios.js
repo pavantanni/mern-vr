@@ -1,7 +1,10 @@
 import axios from "axios";
+
 const API = axios.create({
+  // FIXED: Added 'mern-vr-backend' and '/api'
   baseURL: "https://onrender.com",
 });
+
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
   if (token) {
